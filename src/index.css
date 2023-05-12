@@ -1,0 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #DEB887;
+}
+.container {
+  background-color: #ffffff;
+  min-height: 10vw;
+  width: 200vmin;
+  padding: 40px 30px;
+  position: absolute;
+  left: 4%;
+  top: 10%;
+  border-radius: 10px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+.editorSheet {
+  background-color: #ffffff;
+  width: 90%;
+  border: solid;
+  padding: 15px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  text-align: left;
+}
+.paragraph{
+  width: 98%;
+  float: right;
+  padding: 10px 0;
+}
+.board-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.options {
+  background-color: #FAFAD2;
+  height: 70px;
+  display: flex;
+  position: sticky;
+  top: 5px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+  z-index: 10;
+}
+button {
+  height: 40px;
+  width: 40px;
+  /*display: grid;*/
+  margin: 6px;
+  place-items: center;
+  /*-webkit-border-radius: 1px;
+  -moz-border-radius: 1px;*/
+  /*border-radius: 1px;*/
+  border: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  background-color: #FAFAD2;
+  outline: none;
+  color: #020929;
+  font-weight: 700;
+}
+
+button:hover{
+  background-color: #FFE4B5;
+}
+
+button:active{
+  background-color: #d3cfcf;
+}
+  
+select {
+  padding: 3px;
+  border: 1px solid #020929;
+  border-radius: 10px;
+  margin-left: 5px;
+}
+.options label,
+.options select {
+  font-family: "Poppins", sans-serif;
+}
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+input[type="color"] {
+  padding: 3px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  width: 40px;
+  height: 28px;
+  border: none;
+  cursor: pointer;
+}
+input[type="color"]::-webkit-color-swatch {
+  border-radius: 15px;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #020929;
+}
+input[type="color"]::-moz-color-swatch {
+  border-radius: 15px;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #020929;
+}
+#text-input {
+  margin-top: 10px;
+  border: 1px solid #dddddd;
+  padding: 20px;
+  height: 50vh;
+}
+.active {
+  background-color: #e0e9ff;
+}
+
+.extension{
+  margin: 3px;
+}
+.extension:hover{
+  background-color: #FAFAD2;
+}
+.trash{
+  margin: 3px;
+}
+
+.textbut{
+  position: relative;
+  display: inline-block;
+  width: 70px;
+  font-weight: 700;
+}
+/* Текст подсказки */
+.textbut .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Расположите текст подсказки */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Исчезают в подсказке */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Подсказка стрелка */
+.textbut .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Отображение текста подсказки при наведении курсора мыши на контейнер подсказки */
+.textbut:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Контейнер подсказок */
+.tooltip {
+  margin: 1x;
+  position: relative;
+  display: inline-block;
+  /*border-bottom: 1px dotted black; /* Если вы хотите, чтобы точки под перемещаемым текстом */
+}
+
+/* Текст подсказки */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Расположите текст подсказки */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Исчезают в подсказке */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Подсказка стрелка */
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Отображение текста подсказки при наведении курсора мыши на контейнер подсказки */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.title{
+  margin:7px auto;
+  margin-top: 40px;
+  width: 800px;
+  height: 50px;
+  border-radius: 7px;
+  text-align: center;
+  font-size:x-large;
+}
+.author{
+  margin:5px auto;
+  margin-bottom: 20px;
+  width: 500px;
+  height: 30px;
+  border-radius: 5px;
+  text-align: center;
+  font-size:large;
+}
