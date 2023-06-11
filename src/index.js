@@ -1,16 +1,14 @@
 import React from 'react';
-//import Select from 'react-select';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { library, text } from '@fortawesome/fontawesome-svg-core'
-import { faHourglass1, fas } from '@fortawesome/free-solid-svg-icons'
+import { fas } from '@fortawesome/free-solid-svg-icons'
 import 'katex/dist/katex.min.css';
 import renderMathInElement from 'katex/dist/contrib/auto-render';
-import {InlineMath, BlockMath } from 'react-katex';
 import exportXML from './../src/export.js';
-import ReactDOMServer from 'react-dom/server'
-
+//import { emulateTab } from 'emulate-tab';
+import $ from "jquery";
 library.add(fas)
 
 class Edit extends React.Component{
@@ -22,8 +20,9 @@ class Edit extends React.Component{
       more: false,
       example: false,
       link: false
+      //editor: 
     };
-    this.addValueToArray = this.addValueToArray.bind(this);
+    //this.addValueToArray = this.addValueToArray.bind(this);
     this.addMore = this.addMore.bind(this);
     this.addExample = this.addExample.bind(this);
     this.addLink = this.addLink.bind(this);
@@ -35,18 +34,13 @@ class Edit extends React.Component{
     this.setState({link: false});
   };
   focus() {
-    this.el.focus();
+    this.state.editor.focus();
   }
-  addValueToArray(e) {
+  /*addValueToArray(e) {
     const textContent = e.currentTarget;
     const { values } = this.state;
     console.log(textContent);
-    /*if (values.indexOf(textContent) === -1) {
-      this.setState({
-        values: [...this.state.values, textContent]
-      });
-    }*/
-  }
+  }*/
   addMore(){
     this.setState({value:true});
     this.setState({more:true});
@@ -69,21 +63,21 @@ class Edit extends React.Component{
           {!this.state.value &&
               <button className="tooltip" onClick={() => this.setState({dialog:true})}>
                 <FontAwesomeIcon icon="fa-solid fa-plus"/>
-                <span class="tooltiptext">Добавить расширение</span>
+                <span className="tooltiptext">Добавить расширение</span>
               </button>
           }
           {this.state.dialog && <dialog open>
                       <p>Какое расширение хотите добавить?</p>
-                      <button onClick={() => this.addMore()} class="tooltip">+
-                        <span class="tooltiptext">Подробнее</span>
+                      <button onClick={() => this.addMore()} className="tooltip">+
+                        <span className="tooltiptext">Подробнее</span>
                       </button>
-                      <button onClick={() => this.addExample()} class="tooltip">:
-                        <span class="tooltiptext">Пример</span>
+                      <button onClick={() => this.addExample()} className="tooltip">:
+                        <span className="tooltiptext">Пример</span>
                       </button>
-                      <button onClick={() => this.addLink()} class="tooltip">[ ]
-                        <span class="tooltiptext">Ссылка</span>
+                      <button onClick={() => this.addLink()} className="tooltip">[ ]
+                        <span className="tooltiptext">Ссылка</span>
                       </button>
-                      <button onClick={() => this.setState({dialog:false})} class="textbut">Отмена</button>
+                      <button onClick={() => this.setState({dialog:false})} className="textbut">Отмена</button>
                       </dialog>}
           {
             this.state.more && <button className="extension">
@@ -103,8 +97,7 @@ class Edit extends React.Component{
           <button className="trash" onClick={() => this.props.onClick()}>
           <FontAwesomeIcon icon="fa-solid fa-trash-can"/>
           </button>
-          <div contentEditable="true" className="editorSheet" onKeyPress = {(e) => this.props.onKeyPress(e)}>
-          </div>
+          <div contentEditable="true" className="editorSheet" onKeyPress = {(e) => this.props.onKeyPress(e)}></div>
           </div>
           {this.state.more && <Board depth="11" id="More" deleteBoard={this.deleteBoard}/>}
           {this.state.example && <Board depth="11" id="Example" deleteBoard={this.deleteBoard}/>}
@@ -126,13 +119,27 @@ class Board extends React.Component {
   }
   handleKeyPress = (event, i) => {
     if(event.key === 'Enter'){
+      var $ = require('jquery');
       const newPr1 = this.state.editors;
       const k = this.state.k + 1;
       this.setState({k: k})
       const newPr11 = newPr1.splice(i+1, 0, {id:k, items:<Edit />});
       this.setState({editors: newPr1});
+      //const idPr = this.state.editors[i+1].id;
+      //console.log(idPr);
+      //document.getElementById('${idPr}').focus();
       //this.state.editors[i+1].focus();
       event.preventDefault();
+      
+      //$.emulateTab();
+      //$.emulateTab();
+      //for (let i = 0; i < 3; i++) { // выведет 0, затем 1, затем 2
+      //  emulateTab();
+      //}
+      //emulateTab();
+      //emulateTab.backwards();
+      //emulateTab();
+      //emulateTab.backwards();
     }
   }
   deleteParagraph = (i) =>{
@@ -149,10 +156,6 @@ class Board extends React.Component {
     }
   }
 
-  export(){
-    const newPr1 = this.state.editors;
-    console.log()
-  }
   renderEdit(i){
     return (
       <Edit
@@ -193,6 +196,33 @@ class Options extends React.Component {
       document.execCommand(button, false, userLink);
     }
   }
+  handleForm(){
+    let formula = prompt("Введите формулу");
+    if(formula!==null){
+      if(formula[0]!=="$"){
+        formula = `$${formula}$`;
+      }
+      let html = `<div class=\"formula\">${formula}</div><div class="form">${formula}</div>`;
+      document.execCommand("insertHTML", false, html);
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: false},
+          {left: "$", right: "$", display: false},
+          //{left: "\\(", right: "\\)", display: false},
+          //{left: "\\[", right: "\\]", display: true},
+        ],
+        throwOnError : false,
+        ignoredClasses: ["formula"]
+      })
+    }
+    
+  }
+  //handleImg(){
+
+  //}
+  handleChangeF(formula){
+    formula = prompt("Введите формулу", formula);
+  }
   handleChangeH(selectedH){
     this.setState({selectedH}, () =>
     document.execCommand("formatBlock", false, this.state.selectedH));
@@ -226,20 +256,10 @@ class Options extends React.Component {
         <button id="subscript" onClick={()=>document.execCommand("subscript", false, null)}>
           <FontAwesomeIcon icon="fa-solid fa-subscript"/>
         </button>
-        
-        <button id="function" onClick={()=>renderMathInElement(document.body, {
-                                                                delimiters: [
-                                                                  {left: "$$", right: "$$", display: true},
-                                                                  {left: "$", right: "$", display: false},
-                                                                  {left: "\\(", right: "\\)", display: false},
-                                                                  {left: "\\[", right: "\\]", display: true},
-                                                                  {left: "\begin{equation}", right: "\end{equation}", display: true},
-                                                                  {left: "\begin{matrix}", right: "\end{matrix}", display: true},
-                                                                ],
-                                                                throwOnError : false
-                                            })}>
+
+        <button id="function" onClick={()=>this.handleForm()}>
           <FontAwesomeIcon icon="fa-solid fa-square-root-variable" />
-        </button>
+        </button> 
 
         <button id="undo" onClick={()=>document.execCommand("undo", false, null)}>
           <FontAwesomeIcon icon="fa-solid fa-rotate-left"/>
@@ -247,8 +267,6 @@ class Options extends React.Component {
         <button id="redo" onClick={()=>document.execCommand("redo", false, null)}>
           <FontAwesomeIcon icon="fa-solid fa-rotate-right"/>
         </button>
-
-        
 
         <button id="justifyLeft" onClick={()=>document.execCommand("justifyLeft", false, null)}>
           <FontAwesomeIcon icon="fa-solid fa-align-left"/>
@@ -272,15 +290,15 @@ class Options extends React.Component {
                         <option value="6">6</option>
                         <option value="7">7</option>
                       </select>
-        <button class="textbut" onClick={() => this.props.onClick()}>
+        <button className="textbut" onClick={() => this.props.onClick()}>
           Экспорт
-          <span class="tooltiptext">Скачать эссе в формате XML</span>
+          <span className="tooltiptext">Скачать эссе в формате XML</span>
         </button>
-        <button class="textbut" onClick={() => this.props.onClick()}>
+        <button className="textbut" onClick={() => this.props.onClick()}>
           XSLT
-          <span class="tooltiptext">Скачать XSLT-преобразователь</span>
+          <span className="tooltiptext">Скачать XSLT-преобразователь</span>
         </button>
-        <button class="textbut" onClick={() => this.props.onClick()}>
+        <button className="textbut">
           Импорт
         </button>
 
@@ -331,31 +349,180 @@ class Options extends React.Component {
                         <option value="Georgia">Georgia</option>
                         <option value="Courier New">Courier New</option>
                       </select> */
+class Option extends React.Component{
+  render(){
+    return(
+      <div className="optionRow">
+          <button className="tooltip" onClick={() => this.props.onClick()}>
+                <FontAwesomeIcon icon="fa-solid fa-plus"/>
+                <span className="tooltiptext">Добавить вариант ответа</span>
+          </button>
+          <button className="trash" onClick={() => this.props.onDelete()}>
+          <FontAwesomeIcon icon="fa-solid fa-trash-can"/>
+          </button>
+        <div className="option" contentEditable="true">Вариант ответа</div>
+      </div>
+    )
+  }
+}
+class Task extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      k:0,
+      option: [{id:0, items:<Option />}]
+    };
+  }
+  handleKeyPress = (i) => {
+    const newPr1 = this.state.option;
+    const k = this.state.k + 1;
+    this.setState({k: k})
+    const newPr11 = newPr1.splice(i+1, 0, {id:k, items:<Option />});
+    this.setState({option: newPr1});
+}
+deleteOption = (i) =>{
+  if(this.state.option.length>1){
+    const newPr = this.state.option;
+    newPr.splice(i, 1);  
+    this.setState({option: newPr})
+  }
+}
+  render(){
+    return(
+      <div className="task">
+        <button className="trash" onClick={() => this.props.onDelete()}>
+          <FontAwesomeIcon icon="fa-solid fa-trash-can"/>
+        </button>
+        <div className="question" contentEditable="true">Вопрос</div>
+        <div className="options">
+          {this.state.option.map((part, index) => <Option
+            key={part.id}
+            onClick = {() => this.handleKeyPress(index)}
+            onDelete = {() => this.deleteOption(index)}
+        />)} 
+        </div>
+        <div className="answer" contentEditable="true">Порядковый номер правильного ответа</div>
+        <div className="comment" contentEditable="true">Пояснение к ответу</div>
 
+      </div>
+    )
+  }
+}
+class Tasks extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      k:0,
+      tasks: [{id:0, items:<Task />}]
+    };
+  }
+  handleKeyPress = () => {
+    const newPr1 = this.state.tasks;
+    const k = this.state.k + 1;
+    this.setState({k: k})
+    const newPr11 = newPr1.splice(k, 0, {id:k, items:<Task />});
+    this.setState({tasks: newPr1});
+  }
+  deleteTask = (i) =>{
+    if(this.state.tasks.length>1){
+      const newPr = this.state.tasks;
+      newPr.splice(i, 1);  
+      this.setState({tasks: newPr})
+    }
+  }
+  render(){
+    return(
+      <div className="tasks">
+        {this.state.tasks.map((task, index) => <Task
+            key={task.id}
+            onDelete = {() => this.deleteTask(index)}
+        />)}
+        <button className="textbut" onClick={()=>this.handleKeyPress()}>Добавить вопрос</button>
+      </div>
+    )
+  }
+}
+class Part extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      task:false
+    };
+  }
+  render(){
+    return(
+      <div className="part">
+      <button className="textbut" onClick={() => this.props.onDelete()}>Удалить главу</button>
+      <Board depth="1" id="main"/>
+      {!this.state.task && <button className="textbut" onClick={() => this.setState({task:true})}>Добавить вопросы</button>}
+      {this.state.task && <button className="textbut" onClick={() => this.setState({task:false})}>Удалить вопросы</button>}
+      {this.state.task && <Tasks />}
+      <button className="textbut" onClick={() => this.props.onClick()}>Добавить главу</button>
+      </div>
+    )
+  }
+}
+
+class Parts extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      k:0,
+      parts: [{id:0, items:<Part />}]
+    };
+  }
+  handleKeyPress = (i) => {
+      const newPr1 = this.state.parts;
+      const k = this.state.k + 1;
+      this.setState({k: k})
+      const newPr11 = newPr1.splice(i+1, 0, {id:k, items:<Part />});
+      this.setState({parts: newPr1});
+  }
+  deletePart = (i) =>{
+    if(this.state.parts.length>1){
+      const newPr = this.state.parts;
+      newPr.splice(i, 1);  
+      this.setState({parts: newPr})
+    }
+  }
+  render() {
+    return (
+      <div className="parts" id={this.props.id}>
+        {this.state.parts.map((part, index) => <Part
+            key={part.id}
+            onClick = {() => this.handleKeyPress(index)}
+            onDelete = {() => this.deletePart(index)}
+        />)}
+      </div>
+    );
+  }
+}
 class Container extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text : <Board depth="1" id="main"/>,
+      text : <Parts id="essay"/>
     };
   }
   handleKeyPressExport(){
     //console.log(document);
-    const element = document.getElementById("main");
-    const st = exportXML(element.outerHTML);
-    //console.log(element.outerHTML);
+    const element = document.getElementById("essay");
+    const st = exportXML(element.outerHTML, document.getElementById("title").value, document.getElementById("author").value);
+    console.log(document.getElementById("title").value);
+    console.log(document.getElementById("author").value);
+    console.log(element.outerHTML);
     console.log(st);
     document.write( '<a href="data:text/plain;charset=utf-8,%EF%BB%BF' + encodeURIComponent(st) + '" download="essay.xml">essay.xml</a>' )
   };
   render() {
-    return (
+    return ( 
       <div className="container">
-        <div className="options">
+        <div className="opt">
           <Options onClick = {() => this.handleKeyPressExport()}/>
         </div>
-        <input class="title" placeholder='Название эссе'></input>
-        <input class="author" placeholder='Автор'></input>
-        {this.state.text}
+        <input type="text" className="title" id="title" placeholder='Название эссе'></input>
+        <input type="text" className="author" id="author" placeholder='Автор'></input>
+        <Parts id="essay"/>
       </div>
     );
   }

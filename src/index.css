@@ -29,6 +29,62 @@ body {
   border-radius: 3px;
   text-align: left;
 }
+.task{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: line;
+}
+.question{
+  width: 94%;
+  border: solid;
+  padding: 15px;
+  margin: 10px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  text-align: left;
+}
+.answer{
+  width: 100%;
+  border: solid;
+  padding: 15px;
+  margin: 10px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  text-align: left;
+}
+.options{
+  width: 200vmin;
+}
+.optionRow{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: line;
+}
+.option{
+  width: 90%;
+  border: solid;
+  padding: 15px;
+  margin: 10px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  text-align: left;
+}
+.comment{
+  width: 100%;
+  border: solid;
+  padding: 15px;
+  margin: 10px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  text-align: left;
+}
+.formula{
+  display: none;
+}
 .paragraph{
   width: 98%;
   float: right;
@@ -37,9 +93,9 @@ body {
 .board-row {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: line;
 }
-.options {
+.opt {
   background-color: #FAFAD2;
   height: 70px;
   display: flex;
@@ -82,8 +138,8 @@ select {
   border-radius: 10px;
   margin-left: 5px;
 }
-.options label,
-.options select {
+.opt label,
+.opt select {
   font-family: "Poppins", sans-serif;
 }
 .input-wrapper {
