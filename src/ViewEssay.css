@@ -1,0 +1,74 @@
+button {
+    height: 40px;
+    width: 40px;
+    /*display: grid;*/
+    /*margin: 6px;*/
+    margin: 3px;
+    place-items: center;
+    /*-webkit-border-radius: 1px;
+    -moz-border-radius: 1px;*/
+    /*border-radius: 1px;*/
+    border: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    background-color: #FAFAD2;
+    outline: none;
+    color: #020929;
+    font-weight: 700;
+  }
+  
+  button:hover{
+    background-color: #FFE4B5;
+  }
+  
+  button:active{
+    background-color: #d3cfcf;
+  }
+  .essay {
+    background-color: #ffffff;
+    min-height: 10vw;
+    width: 98%;
+    padding: 40px 30px;
+    position: absolute;
+    left: 1%;
+    top: 2%;
+    border-radius: 10px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    /*text-align: center;*/
+  }
+  .titleView {
+    margin:7px auto;
+    margin-top: 40px;
+    width: 95%;
+    border-radius: 7px;
+    text-align: center;
+    font-size: 45px;
+  }
+  .authorView {
+    margin:7px auto;
+    margin-top: 30px;
+    width: 85%;
+    border-radius: 7px;
+    text-align: center;
+    font-size: 30px;
+  }
+  .partTitleView {
+    margin:7px auto;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    width: 85%;
+    border-radius: 7px;
+    text-align: center;
+    font-size: 23px;
+  }
+  .textView{
+    float: right;
+    width: 95%;
+    margin-bottom: 10px;
+    margin-top: 15px;
+  }
+  .paragraphView{
+    width: 95%;
+    float: right;
+  }
+
