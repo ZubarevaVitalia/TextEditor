@@ -9,14 +9,14 @@ export default function getHTML(essay){
     </head>
     <script type="text/javascript">
         function extensionActive(uid){
-            let extId = \`\${uid}.extension\`;
+            let extId = \`\${uid}-extension\`;
             document.getElementById(extId).style.display='block';
             document.getElementById(uid).style.display='none';
         }
     </script>
     <script type="text/javascript">
         function extensionNonActive(uid){
-            let extId = \`\${uid}.extension\`;
+            let extId = \`\${uid}-extension\`;
             document.getElementById(extId).style.display='none';
             document.getElementById(uid).style.display='block';
         }
@@ -30,7 +30,7 @@ export default function getHTML(essay){
         function addTasks(partNumb, taskNumb){
             let noneId = \`notSeeTask\${partNumb}\`;
             let seeId = \`seeTask\${partNumb}\`;
-            let taskId = \`task\${partNumb}.\${taskNumb}\`;
+            let taskId = \`task\${partNumb}-\${taskNumb}\`;
             document.getElementById(noneId).style.display='none';
             document.getElementById(seeId).style.display='block';
             document.getElementById(taskId).style.display='block';
@@ -43,9 +43,9 @@ export default function getHTML(essay){
             document.getElementById(noneId).style.display='none';
             document.getElementById(seeId).style.display='block';
             for(let i=0; i<len; i++){
-                let taskId = \`task\${partNumb}.\${i}\`;
-                let answerId = \`taskAnswer\${partNumb}.\${i}\`;
-                let optionId = \`taskAnswerOption\${partNumb}.\${i}\`;
+                let taskId = \`task\${partNumb}-\${i}\`;
+                let answerId = \`taskAnswer\${partNumb}-\${i}\`;
+                let optionId = \`taskAnswerOption\${partNumb}-\${i}\`;
                 document.getElementById(taskId).style.display='none';
                 document.getElementById(answerId).style.display='none';
                 document.getElementById(optionId).style.display='none';
@@ -55,22 +55,22 @@ export default function getHTML(essay){
     </script>
     <script type="text/javascript">
         function changeShowAnswer(partNumb, taskNumb){
-            let answId = \`taskAnswer\${partNumb}.\${taskNumb}\`
+            let answId = \`taskAnswer\${partNumb}-\${taskNumb}\`
             document.getElementById(answId).style.display='block';
         }
     </script>
     <script type="text/javascript">
         function changeShowOption(partNumb, taskNumb){
-            let answId = \`taskAnswer\${partNumb}.\${taskNumb}\`
-            let optId = \`taskAnswerOption\${partNumb}.\${taskNumb}\`
+            let answId = \`taskAnswer\${partNumb}-\${taskNumb}\`
+            let optId = \`taskAnswerOption\${partNumb}-\${taskNumb}\`
             document.getElementById(answId).style.display='none';
             document.getElementById(optId).style.display='block';
         }
     </script>
     <script type="text/javascript">
         function dontShowAnswer(partNumb, taskNumb){
-            let answId = \`taskAnswer\${partNumb}.\${taskNumb}\`
-            let optId = \`taskAnswerOption\${partNumb}.\${taskNumb}\`
+            let answId = \`taskAnswer\${partNumb}-\${taskNumb}\`
+            let optId = \`taskAnswerOption\${partNumb}-\${taskNumb}\`
             document.getElementById(answId).style.display='none';
             document.getElementById(optId).style.display='none';
         }
@@ -82,13 +82,9 @@ export default function getHTML(essay){
         button {
         height: 40px;
         width: 40px;
-        /*display: grid;*/
         margin: 3px;
         margin-left: 0px;
         place-items: center;
-        /*-webkit-border-radius: 1px;
-        -moz-border-radius: 1px;*/
-        /*border-radius: 1px;*/
         border: solid;
         border-width: 1px;
         border-radius: 5px;
@@ -109,7 +105,7 @@ export default function getHTML(essay){
         .essay {
             background-color: #ffffff;
             min-height: 10vw;
-            width: 1280px;
+            width: 98%;
             padding: 40px 30px;
             position: absolute;
             left: 1%;
@@ -181,11 +177,19 @@ function renderEssay(essay){
 };
 
 function renderPart(part, i){
-    return `<div class='partView'>
+    if(part.tasks){
+        return `<div class='partView'>
+        <div class='partTitleView'>${part.partTitle}</div>
+        ${renderParagraphs(part.paragraphs)}
+        ${renderTasks(part.tasks, i)}
+    </div>`
+    }
+    else{
+        return `<div class='partView'>
                     <div class='partTitleView'>${part.partTitle}</div>
                     ${renderParagraphs(part.paragraphs)}
-                    ${part.tasks && renderTasks(part.tasks, i)}
                 </div>`
+    }
 }
 //
 function renderParagraphs(paragraphs){
@@ -212,12 +216,30 @@ function renderExtensionParagraphs(paragraphs){
     return html
 }
 
+function replaceAll(find, replace, str) {
+    while( str.indexOf(find) !== -1) {
+      str = str.replace(find, replace);
+    }
+    return str;
+}
+
 function renderParagraph(paragraph){
     const extensionType = {
         ['More']: '+',
-        ['Link']: '[]',
+        ['Link']: '[ ]',
         ['Example']: ':',
+        ['MoreAdd']: '+',
+        ['LinkAdd']: '[ ]',
+        ['ExampleAdd']: ':',
     };
+    let extension = [];
+    if(paragraph.extension){
+        extension = paragraph.extension.paragraphs.slice();
+        if(paragraph.extension.type.indexOf('Add')!==-1 && extension.length){
+            extension[0].basic = `${paragraph.basic}
+            <div>${extension[0].basic}</div>`;
+        }
+    }
     const extId = `${paragraph.uid}.extension`
     let html = paragraph.extension ? `
                                         <div id=${paragraph.uid} class='paragraphView' style="display:block">
@@ -226,8 +248,8 @@ function renderParagraph(paragraph){
                                             <div class='textView' style="width:95%">${paragraph.basic}</div>  
                                         </div>
                                         <div id=${extId} class='paragraphView' style="display:none">
-                                            <button onClick="extensionNonActive(${paragraph.uid})">-</button> 
-                                            ${renderExtensionParagraphs(paragraph.extension.paragraphs)}
+                                            <button onClick="extensionNonActive(${paragraph.uid})">&larr;</button> 
+                                            ${renderExtensionParagraphs(extension)}
                                         </div>
                                     ` 
                                 : `<div class='paragraphView'>
@@ -235,16 +257,36 @@ function renderParagraph(paragraph){
                                             ${paragraph.basic}
                                         </div>
                                   </div>`
+    html = replaceAll('\\~', '~', html);
+    html = replaceAll('\\\\', '\\', html);
+    html = replaceAll('~', '&nbsp;', html);
+    html = replaceAll('---', '&#8212;', html);
+    html = replaceAll('--', '&#8211;', html);
+    html = replaceAll('``', '“', html);
+    html = replaceAll('\'\'', '”', html);
+    html = replaceAll('<<', '«', html);
+    html = replaceAll('>>', '»', html);
     return html
 }
 
 function renderExtensionParagraph(paragraph, i, existExt){
     const extensionType = {
         ['More']: '+',
-        ['Link']: '[]',
+        ['Link']: '[ ]',
         ['Example']: ':',
+        ['MoreAdd']: '+',
+        ['LinkAdd']: '[ ]',
+        ['ExampleAdd']: ':',
     };
-    const extId = `${paragraph.uid}.extension`;
+    let extension = [];
+    if(paragraph.extension){
+        extension = paragraph.extension.paragraphs.slice();
+        if(paragraph.extension.type.indexOf('Add')!==-1 && extension.length){
+            extension[0].basic = `${paragraph.basic}
+            <div>${extension[0].basic}</div>`;
+        }
+    }
+    const extId = `${paragraph.uid}-extension`;
     const width = existExt ? 95 : 100;
     const width0 = existExt ? 90 : 95;
     if(i === 0){
@@ -255,11 +297,20 @@ function renderExtensionParagraph(paragraph, i, existExt){
                                                     <div class='textView' style="width:95%">${paragraph.basic}</div>  
                                             </div>
                                             <div id=${extId} class='paragraphView' style="display:none">
-                                                <button onClick="extensionNonActive(${paragraph.uid})">-</button> 
-                                                ${renderExtensionParagraphs(paragraph.extension.paragraphs)}
+                                                <button onClick="extensionNonActive(${paragraph.uid})">&larr;</button> 
+                                                ${renderExtensionParagraphs(extension)}
                                             </div>
                                             </span>` 
                                     : `<div class='textView' style="width:${width0}%">${paragraph.basic}</div>`
+        html = replaceAll('\\~', '~', html);
+        html = replaceAll('\\\\', '\\', html);
+        html = replaceAll('~', '&nbsp;', html);
+        html = replaceAll('---', '&#8212;', html);
+        html = replaceAll('--', '&#8211;', html);
+        html = replaceAll('``', '“', html);
+        html = replaceAll('\'\'', '”', html);
+        html = replaceAll('<<', '«', html);
+        html = replaceAll('>>', '»', html);
         return html
     }
     else{
@@ -270,8 +321,8 @@ function renderExtensionParagraph(paragraph, i, existExt){
                                                     <div class='textView' style="width:${width}%">${paragraph.basic}</div>  
                                             </div>
                                             <div id=${extId} class='paragraphView'style="display:none">
-                                                <button onClick="extensionNonActive(${paragraph.uid})">-</button> 
-                                                ${renderExtensionParagraphs(paragraph.extension.paragraphs)}
+                                                <button onClick="extensionNonActive(${paragraph.uid})">&larr;</button> 
+                                                ${renderExtensionParagraphs(extension)}
                                             </div>
                                         </div>` 
                                     : `<div class='paragraphView'>
@@ -279,6 +330,15 @@ function renderExtensionParagraph(paragraph, i, existExt){
                                                 ${paragraph.basic}
                                             </div>
                                     </div>`
+        html = replaceAll('\\~', '~', html);
+        html = replaceAll('\\\\', '\\', html);
+        html = replaceAll('~', '&nbsp;', html);
+        html = replaceAll('---', '&#8212;', html);
+        html = replaceAll('--', '&#8211;', html);
+        html = replaceAll('``', '“', html);
+        html = replaceAll('\'\'', '”', html);
+        html = replaceAll('<<', '«', html);
+        html = replaceAll('>>', '»', html);
         return html
     }
 }
@@ -291,7 +351,7 @@ function renderTasks(tasks, partNumb){
                         <div class='textView' style="width:95%"></div>
                     </div>
                     <div id="seeTask${partNumb}" class='paragraphView' style="display:none">
-                        <button onClick="dontTasks(${partNumb}, ${tasks.length})">-</button>
+                        <button onClick="dontTasks(${partNumb}, ${tasks.length})">&larr;</button>
                     `
     for(let i = 0; i<temp.length; i++){
          html += temp[i];
@@ -312,7 +372,7 @@ function renderTask(task, partNumb, taskNumb){
     for(let i = 0; i<tempOption.length; i++){
         option += tempOption[i];
     }
-    let html = `<div id="task${partNumb}.${taskNumb}" style="display:none; width:95%; float:right; margin-bottom:10px; margin-top:15px">
+    let html = `<div id="task${partNumb}-${taskNumb}" style="display:none; width:95%; float:right; margin-bottom:10px; margin-top:15px">
                     <div><i>Вопрос: </i>${task.question}</div>
                     <div style="margin-left:30px; margin-top:10px">
                         <ol class='list'>
@@ -325,14 +385,14 @@ function renderTask(task, partNumb, taskNumb){
                             ${option}
                         </select>
                     </div>
-                        <div class='paragraphView' id="taskAnswer${partNumb}.${taskNumb}" style="display:none">
+                        <div class='paragraphView' id="taskAnswer${partNumb}-${taskNumb}" style="display:none">
                             <button onClick="changeShowOption(${partNumb}, ${taskNumb})">+</button>
                             <div class='textView' style="width:95%; margin-bottom:0">
                                 Правильный ответ - ${task.rightAnswer}
                             </div>      
                         </div>
-                        <div class='paragraphView' id="taskAnswerOption${partNumb}.${taskNumb}" style="display:none">
-                            <button onClick="dontShowAnswer(${partNumb},${taskNumb})">-</button>
+                        <div class='paragraphView' id="taskAnswerOption${partNumb}-${taskNumb}" style="display:none">
+                            <button onClick="dontShowAnswer(${partNumb},${taskNumb})">&larr;</button>
                             <div class='textView' style="width:95%; margin-bottom:0">
                                 Правильный ответ - ${task.rightAnswer}
                             </div>

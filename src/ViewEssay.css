@@ -3,7 +3,7 @@ button {
     width: 40px;
     /*display: grid;*/
     /*margin: 6px;*/
-    margin: 3px;
+    margin-right: 3px;
     place-items: center;
     /*-webkit-border-radius: 1px;
     -moz-border-radius: 1px;*/
@@ -64,8 +64,8 @@ button {
   .textView{
     float: right;
     width: 95%;
-    margin-bottom: 10px;
-    margin-top: 15px;
+    /*margin-bottom: 10px;
+    margin-top: 15px;*/
   }
   .paragraphView{
     width: 95%;

@@ -51,66 +51,116 @@ class ViewEssay extends React.Component {
         document.getElementById(uid).style.display='block';
         document.getElementById(extId).style.display='none';
     }
+
+    replaceAll(find, replace, str) {
+        while( str.indexOf(find) !== -1) {
+          str = str.replace(find, replace);
+        }
+        return str;
+    }
+
     renderParagraph = (paragraph) => {
         const extensionType = {
             ['More']: '+',
-            ['Link']: '[]',
+            ['Link']: '[ ]',
             ['Example']: ':',
+            ['MoreAdd']: '+',
+            ['LinkAdd']: '[ ]',
+            ['ExampleAdd']: ':',
         };
+        let extension = [];
+        if(paragraph.extension){
+            extension = paragraph.extension.paragraphs.slice();
+            if(paragraph.extension.type.indexOf('Add')!==-1 && extension.length){
+                extension[0].basic = `${paragraph.basic}
+                <div>${extension[0].basic}</div>`;
+            }
+        }
+        let basic = paragraph.basic.slice();
+        basic = this.replaceAll('\\~', '~', basic);
+        basic = this.replaceAll('\\\\', '\\', basic);
+        basic = this.replaceAll('~', '&nbsp;', basic);
+        basic = this.replaceAll('---', '&#8212;', basic);
+        basic = this.replaceAll('--', '&#8211;', basic);
+        basic = this.replaceAll('``', '“', basic);
+        basic = this.replaceAll('\'\'', '”', basic);
+        basic = this.replaceAll('<<', '«', basic);
+        basic = this.replaceAll('>>', '»', basic);
         const extId = `${paragraph.uid}.extension`;
         return paragraph.extension ? <div><div id={paragraph.uid} className='paragraphView' style={{display:'block'}}>
                                         <button onClick={() => this.extensionActive(paragraph.uid)}>
                                             {extensionType[paragraph.extension.type]}</button>
-                                            <div className='textView' style={{width:'95%'}} dangerouslySetInnerHTML={{__html: paragraph.basic}}></div> 
+                                            <div className='textView' style={{width:'95%'}} dangerouslySetInnerHTML={{__html: basic}}></div> 
                                         </div>
                                         <div id={extId} className='paragraphView' style={{display:"none"}}>
-                                            <button onClick={() => this.extensionNonActive(paragraph.uid)}>-</button> 
-                                                {this.renderExtensionParagraphs(paragraph.extension.paragraphs, 1)}
+                                            <button onClick={() => this.extensionNonActive(paragraph.uid)} dangerouslySetInnerHTML={{__html: '&larr;'}}></button> 
+                                                {this.renderExtensionParagraphs(extension, 1)}
                                         </div>
                                     </div>
                                     :
                                     <div className='paragraphView'>
-                                        <div className='textView' style={{width:'95%'}} dangerouslySetInnerHTML={{__html: paragraph.basic}}></div>
+                                        <div className='textView' style={{width:'95%'}} dangerouslySetInnerHTML={{__html: basic}}></div>
                                    </div>
     }
     renderExtensionParagraph = (paragraph, i, depth, existExt) => {
         const extensionType = {
             ['More']: '+',
-            ['Link']: '[]',
+            ['Link']: '[ ]',
             ['Example']: ':',
+            ['MoreAdd']: '+',
+            ['LinkAdd']: '[ ]',
+            ['ExampleAdd']: ':',
         };
         const extId = `${paragraph.uid}.extension`;
         const pad = existExt ? 48 : 0;
         const width = existExt ? 95 : 100;
         const width0 = existExt ? 90 : 95;
+        let extension = [];
+        if(paragraph.extension){
+            extension = paragraph.extension.paragraphs.slice();
+            if(paragraph.extension.type.indexOf('Add')!==-1 && extension.length){
+                extension[0].basic = `${paragraph.basic}<div>
+                ${extension[0].basic}</div>`;
+            }
+        }
+        let basic = paragraph.basic.slice();
+        basic = this.replaceAll('\\~', '~', basic);
+        basic = this.replaceAll('\\\\', '\\', basic);
+        basic = this.replaceAll('~', '&nbsp;', basic);
+        basic = this.replaceAll('---', '&#8212;', basic);
+        basic = this.replaceAll('--', '&#8211;', basic);
+        basic = this.replaceAll('``', '“', basic);
+        basic = this.replaceAll('\'\'', '”', basic);
+        basic = this.replaceAll('<<', '«', basic);
+        basic = this.replaceAll('>>', '»', basic);
         if(i === 0){
             return paragraph.extension ? <span>
                                                 <div id={paragraph.uid} className='paragraphView' style={{display:"block"}}>
                                                     <button onClick={() => this.extensionActive(paragraph.uid)}>
                                                         {extensionType[paragraph.extension.type]}</button>
-                                                    <div className='textView' style={{width:`95%`}} dangerouslySetInnerHTML={{__html: paragraph.basic}}></div>
+                                                    <div className='textView' style={{width:`95%`}} dangerouslySetInnerHTML={{__html: basic}}></div>
                                                 </div>
                                                 <div id={extId} className='paragraphView' style={{display:"none"}}>
-                                                    <button onClick={() => this.extensionNonActive(paragraph.uid)}>-</button> 
-                                                    {this.renderExtensionParagraphs(paragraph.extension.paragraphs, depth+1)}
+                                                    <button onClick={() => this.extensionNonActive(paragraph.uid)} dangerouslySetInnerHTML={{__html: '&larr;'}}></button> 
+                                                    {this.renderExtensionParagraphs(extension, depth+1)}
                                                 </div>
                                             </span>
-                                        : <div className='textView' style={{width:`${width0}%`}} dangerouslySetInnerHTML={{__html: paragraph.basic}}></div>
+                                        : <div className='textView' style={{width:`${width0}%`}} dangerouslySetInnerHTML={{__html: basic}}></div>
         }
         else{
             return paragraph.extension ?  <div>
                                                 <div id={paragraph.uid} className='paragraphView' style={{display:"block"}}>
                                                     <button onClick={() => this.extensionActive(paragraph.uid)}>
                                                         {extensionType[paragraph.extension.type]}</button>
-                                                        <div className='textView' style={{width:`${width}%`}} dangerouslySetInnerHTML={{__html: paragraph.basic}}></div>  
+                                                        <div className='textView' style={{width:`${width}%`}} dangerouslySetInnerHTML={{__html: basic}}></div>  
                                                 </div>
                                                 <div id={extId} className='paragraphView'style={{display:"none"}}>
-                                                    <button onClick={() => this.extensionNonActive(paragraph.uid)}>-</button> 
-                                                    {this.renderExtensionParagraphs(paragraph.extension.paragraphs, depth+1)}
+                                                    <button onClick={() => this.extensionNonActive(paragraph.uid)} dangerouslySetInnerHTML={{__html: '&larr;'}}></button> 
+                                                    {this.renderExtensionParagraphs(extension, depth+1)}
                                                 </div>
                                            </div>
                                         : <div className='paragraphView'>
-                                                <div className='textView' style={{width:`${width}%`}} dangerouslySetInnerHTML={{__html: paragraph.basic}}></div>
+                                                <div className='textView' style={{width:`${width}%`}} dangerouslySetInnerHTML={{__html: basic}}></div>
                                         </div>
         }
 
@@ -156,12 +206,13 @@ class ViewEssay extends React.Component {
         this.forceUpdate();
     }
     renderTask = (task, partNumber) => {
+        let questionHtml = `<i>Вопрос: </i>${task.question}`
         return (
             <div style={{width:'95%', float: 'right', marginBottom: '10px', marginTop: '15px'}}>
-                <div><i>Вопрос: </i>{task.question}</div>
+                <div dangerouslySetInnerHTML={{__html: questionHtml}}></div>
                 <div style={{marginLeft:'30px', marginTop:'10px'}}>
                     <ol class='list'>
-                        {task.answers.map((answer, i) => <li>{answer.answer}</li>)}
+                        {task.answers.map((answer, i) => <li dangerouslySetInnerHTML={{__html: answer.answer}}></li>)}
                     </ol>
                 </div>
                 <div><i>Выберите ответ: </i>
@@ -173,12 +224,12 @@ class ViewEssay extends React.Component {
                 {this.showAnswer[partNumber] && 
                     <div className='paragraphView'>
                         {!this.showOption[partNumber] && <button onClick={() => this.changeShowOption(partNumber)}>+</button>}
-                        {this.showOption[partNumber] && <button onClick={() => this.dontShowAnswer(partNumber)}>-</button>}
+                        {this.showOption[partNumber] && <button onClick={() => this.dontShowAnswer(partNumber)} dangerouslySetInnerHTML={{__html: '&larr;'}}></button>}
                         <div className='textView' style={{width:`95%`, marginBottom:'0'}}>
                             Правильный ответ - {task.rightAnswer}
                         </div>
                         {this.showOption[partNumber] &&
-                            <div className='textView' style={{width:`95%`, marginTop:'0'}}>{task.option}</div>}
+                            <div className='textView' style={{width:`95%`, marginTop:'0'}} dangerouslySetInnerHTML={{__html: task.option}}></div>}
                     </div>
                 }
             </div>
@@ -197,7 +248,7 @@ class ViewEssay extends React.Component {
         else{
             return(
                 <div className='paragraphView'>
-                    <button onClick={() => this.noTasks(partNumber)}>-</button>
+                    <button onClick={() => this.noTasks(partNumber)} dangerouslySetInnerHTML={{__html: '&larr;'}}></button>
                     {this.renderTask(tasks[this.randNumbTask[partNumber]], partNumber)}
                 </div>
             )

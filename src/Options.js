@@ -13,7 +13,7 @@ class Options extends React.Component {
       this.state = {
         selectedH : null,
         selectedSize: 3,
-        selectedName: "Arial",
+        selectedName: "Times New Roman",
       };
     }
 
@@ -38,8 +38,10 @@ class Options extends React.Component {
     }
 
     handleChangeName(selectedName){
+      console.log(selectedName);
       this.setState({selectedName}, () =>
-      document.execCommand("fontName", false, this.state.selectedSize));
+      document.execCommand("fontName", false, this.state.selectedName));
+      console.log(selectedName);
     }
 
     readURL = file => {
@@ -114,9 +116,20 @@ class Options extends React.Component {
                           <option value="5">5</option>
                           <option value="6">6</option>
                           <option value="7">7</option>
-                        </select>
+          </select>
+          <select id="fontName" onChange={e => this.handleChangeName(e.target.value)} value={this.state.selectedName}>
+                        <option value="Arial" style={{fontFamily: "Arial"}}>Arial</option>
+                        <option value="Calibri" style={{fontFamily: "Calibri"}}>Calibri</option>
+                        <option value="Courier New" style={{fontFamily: "Courier New"}}>Courier New</option>
+                        <option value="Georgia" style={{fontFamily: "Georgia"}}>Georgia</option>
+                        <option value="Montserrat" style={{fontFamily: "Montserrat"}}>Montserrat</option>
+                        <option value="Open Sans" style={{fontFamily: "Open Sans"}}>Open Sans</option>
+                        <option value="Roboto" style={{fontFamily: "Roboto"}}>Roboto</option>
+                        <option value="Times New Roman" style={{fontFamily: "Times New Roman"}}>Times New Roman</option>
+                        <option value="Verdana" style={{fontFamily: "Verdana"}}>Verdana</option>
+                      </select>
           <button className="textbut">
-            <a href = {URL.createObjectURL(new Blob([JSON.stringify(this.props.essay)], 
+            <a href = {URL.createObjectURL(new Blob([JSON.stringify(this.props.essay, null, "\t")], 
                       {type: 'application/json'}))}
             download = "essay.json"
             >Сохранить</a>
@@ -133,11 +146,11 @@ class Options extends React.Component {
               Просмотр
             </button>
           </Link>
-          <button className="textbut">
+          <button className="textbut" style={{width:'120px'}}>
             <a href = {URL.createObjectURL(new Blob([getHTML(this.props.essay)], 
                       {type: 'text/plain'}))}
             download = "essay.html"
-            >Сохранить в формате HTML</a>
+            >Сохранить HTML</a>
           </button>
         </div>
       );

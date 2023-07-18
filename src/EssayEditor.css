@@ -1,13 +1,14 @@
 
 .editorSheet {
   background-color: #ffffff;
-  width: 85%;
+  width: 88%;
   border: solid;
   padding: 15px;
   border-style: solid;
   border-width: 1px;
   border-radius: 3px;
   text-align: left;
+  font-family: 'Times New Roman', Times, serif;
 }
 * {
   padding: 0;
@@ -19,8 +20,8 @@ body {
 }
 .container {
   background-color: #ffffff;
-  min-height: 10vw;
-  width: 200vmin;
+  min-height: 100px;
+  width: 93%;
   padding: 40px 30px;
   position: absolute;
   left: 4%;
@@ -34,8 +35,19 @@ body {
   flex-wrap: wrap;
   align-items: line;
 }
+.description{
+  margin-top: 25px;
+}
 .question{
-  width: 94%;
+  width: 100%;
+  margin: 10px;
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: line;
+}
+.questionEdit{
+  width: 88.7%;
   border: solid;
   padding: 15px;
   margin: 10px;
@@ -46,12 +58,26 @@ body {
 }
 .answer{
   width: 100%;
+  margin: 10px;
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: line;
+}
+.answerEdit{
+  width: 79.3%;
   border: solid;
   padding: 15px;
   margin: 10px;
   border-style: solid;
   border-width: 1px;
   border-radius: 3px;
+  text-align: left;
+}
+.rightAnswer{
+  width: 100%;
+  padding: 15px;
+  margin: 10px;
   text-align: left;
 }
 .options{
@@ -63,7 +89,15 @@ body {
   align-items: line;
 }
 .option{
-  width: 90%;
+  width: 100%;
+  margin: 10px;
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: line;
+}
+.optionEdit{
+  width: 80%;
   border: solid;
   padding: 15px;
   margin: 10px;
@@ -97,7 +131,7 @@ body {
 }
 .opt {
   background-color: #FAFAD2;
-  height: 70px;
+  min-height: 70px;
   display: flex;
   position: sticky;
   top: 5px;
@@ -105,6 +139,7 @@ body {
   align-items: center;
   gap: 15px;
   z-index: 10;
+  border-radius: 5px;
 }
 button {
   height: 40px;
@@ -281,7 +316,7 @@ input[type="color"]::-moz-color-swatch {
 .title{
   margin:7px auto;
   margin-top: 40px;
-  width: 800px;
+  width: 95%;
   height: 50px;
   border-radius: 7px;
   text-align: center;
@@ -290,14 +325,14 @@ input[type="color"]::-moz-color-swatch {
 .author{
   margin:5px auto;
   margin-bottom: 20px;
-  width: 500px;
+  width: 80%;
   height: 30px;
   border-radius: 5px;
   text-align: center;
   font-size:large;
 }
 .partTitle{
-  width: 450px;
+  width: 75%;
   height: 30px;
   border-radius: 5px;
   text-align: center;
