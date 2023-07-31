@@ -4,6 +4,7 @@ import './ViewEssay.css'
 //import 'katex/dist/katex.min.css';
 //import renderMathInElement from 'katex/dist/contrib/auto-render';
 import {MathJaxContext, MathJax} from 'better-react-mathjax'
+import getHTML from './GetHTML';
 
 /*<Link to="/" state={{essay: this.location.state}}>
                 <button className="textbut">
@@ -84,13 +85,13 @@ class ViewEssay extends React.Component {
         basic = this.replaceAll('--', '&#8211;', basic);
         basic = this.replaceAll('``', '“', basic);
         basic = this.replaceAll('\'\'', '”', basic);
-        basic = this.replaceAll('<<', '«', basic);
-        basic = this.replaceAll('>>', '»', basic);
+        basic = this.replaceAll('&lt;&lt;', '«', basic);
+        basic = this.replaceAll('&gt;&gt;', '»', basic);
         const extId = `${paragraph.uid}.extension`;
         return paragraph.extension ? <div><div id={paragraph.uid} className='paragraphView' style={{display:'block'}}>
                                         <button onClick={() => this.extensionActive(paragraph.uid)}>
                                             {extensionType[paragraph.extension.type]}</button>
-                                            <div className='textView' style={{width:'95%'}} dangerouslySetInnerHTML={{__html: basic}}></div> 
+                                            <div className='textView' dangerouslySetInnerHTML={{__html: basic}}></div> 
                                         </div>
                                         <div id={extId} className='paragraphView' style={{display:"none"}}>
                                             <button onClick={() => this.extensionNonActive(paragraph.uid)} dangerouslySetInnerHTML={{__html: '&larr;'}}></button> 
@@ -99,7 +100,7 @@ class ViewEssay extends React.Component {
                                     </div>
                                     :
                                     <div className='paragraphView'>
-                                        <div className='textView' style={{width:'95%'}} dangerouslySetInnerHTML={{__html: basic}}></div>
+                                        <div className='textView' dangerouslySetInnerHTML={{__html: basic}}></div>
                                    </div>
     }
     renderExtensionParagraph = (paragraph, i, depth, existExt) => {
@@ -131,28 +132,28 @@ class ViewEssay extends React.Component {
         basic = this.replaceAll('--', '&#8211;', basic);
         basic = this.replaceAll('``', '“', basic);
         basic = this.replaceAll('\'\'', '”', basic);
-        basic = this.replaceAll('<<', '«', basic);
-        basic = this.replaceAll('>>', '»', basic);
+        basic = this.replaceAll('&lt;&lt;', '«', basic);
+        basic = this.replaceAll('&gt;&gt;', '»', basic);
         if(i === 0){
             return paragraph.extension ? <span>
                                                 <div id={paragraph.uid} className='paragraphView' style={{display:"block"}}>
                                                     <button onClick={() => this.extensionActive(paragraph.uid)}>
                                                         {extensionType[paragraph.extension.type]}</button>
-                                                    <div className='textView' style={{width:`95%`}} dangerouslySetInnerHTML={{__html: basic}}></div>
+                                                    <div className='textView' dangerouslySetInnerHTML={{__html: basic}}></div>
                                                 </div>
                                                 <div id={extId} className='paragraphView' style={{display:"none"}}>
                                                     <button onClick={() => this.extensionNonActive(paragraph.uid)} dangerouslySetInnerHTML={{__html: '&larr;'}}></button> 
                                                     {this.renderExtensionParagraphs(extension, depth+1)}
                                                 </div>
                                             </span>
-                                        : <div className='textView' style={{width:`${width0}%`}} dangerouslySetInnerHTML={{__html: basic}}></div>
+                                        : <div className='textView' dangerouslySetInnerHTML={{__html: basic}}></div>
         }
         else{
             return paragraph.extension ?  <div>
                                                 <div id={paragraph.uid} className='paragraphView' style={{display:"block"}}>
                                                     <button onClick={() => this.extensionActive(paragraph.uid)}>
                                                         {extensionType[paragraph.extension.type]}</button>
-                                                        <div className='textView' style={{width:`${width}%`}} dangerouslySetInnerHTML={{__html: basic}}></div>  
+                                                        <div className='textView' dangerouslySetInnerHTML={{__html: basic}}></div>  
                                                 </div>
                                                 <div id={extId} className='paragraphView'style={{display:"none"}}>
                                                     <button onClick={() => this.extensionNonActive(paragraph.uid)} dangerouslySetInnerHTML={{__html: '&larr;'}}></button> 
@@ -160,7 +161,7 @@ class ViewEssay extends React.Component {
                                                 </div>
                                            </div>
                                         : <div className='paragraphView'>
-                                                <div className='textView' style={{width:`${width}%`}} dangerouslySetInnerHTML={{__html: basic}}></div>
+                                                <div className='textView' dangerouslySetInnerHTML={{__html: basic}}></div>
                                         </div>
         }
 
@@ -225,11 +226,11 @@ class ViewEssay extends React.Component {
                     <div className='paragraphView'>
                         {!this.showOption[partNumber] && <button onClick={() => this.changeShowOption(partNumber)}>+</button>}
                         {this.showOption[partNumber] && <button onClick={() => this.dontShowAnswer(partNumber)} dangerouslySetInnerHTML={{__html: '&larr;'}}></button>}
-                        <div className='textView' style={{width:`95%`, marginBottom:'0'}}>
+                        <div className='textView' style={{marginBottom:'0'}}>
                             Правильный ответ - {task.rightAnswer}
                         </div>
                         {this.showOption[partNumber] &&
-                            <div className='textView' style={{width:`95%`, marginTop:'0'}} dangerouslySetInnerHTML={{__html: task.option}}></div>}
+                            <div className='textView' style={{marginTop:'0'}} dangerouslySetInnerHTML={{__html: task.option}}></div>}
                     </div>
                 }
             </div>
@@ -241,7 +242,7 @@ class ViewEssay extends React.Component {
             return(
                 <div className='paragraphView'>
                     <button onClick={() => this.addTasks(tasks, partNumber)}>T</button>
-                    <div className='textView' style={{width:`95%`}}></div>
+                    <div className='textView'></div>
                 </div>
             )
         }
@@ -286,5 +287,6 @@ const View = props => {
     console.log(location)
     essay = JSON.parse(localStorage.getItem("essay")) || null;
     return <ViewEssay/>
+    //return <div dangerouslySetInnerHTML={{__html: ${getHTML(essay)}`}}></div>;
 }
 export default View;

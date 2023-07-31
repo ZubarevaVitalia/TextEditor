@@ -141,12 +141,13 @@ export default function getHTML(essay){
           }
           .textView{
             float: right;
-            width: 95%;
+            width: calc(100% - 50px);
+            text-indent: 10px;
             margin-bottom: 10px;
             margin-top: 15px;
           }
           .paragraphView{
-            width: 95%;
+            width: calc(100% - 50px);
             float: right;
           }
         </style>
@@ -173,6 +174,19 @@ function renderEssay(essay){
     }
     html+=   `</div>
     </div>`
+    //html = replaceAll('\\~', '~', html);
+    //html = replaceAll('\\\\', '\\', html);
+    html = replaceAll('~', '&nbsp;', html);
+    html = replaceAll('---', '&#8212;', html);
+    html = replaceAll('--', '&#8211;', html);
+    html = replaceAll('``', '“', html);
+    html = replaceAll('\'\'', '”', html);
+    html = replaceAll('&lt;&lt;', '«', html);
+    html = replaceAll('&gt;&gt;', '»', html);
+    html = replaceAll('<<', '«', html);
+    html = replaceAll('>>', '»', html);
+    //html = replaceAll('(', '&#40;', html);
+    //html = replaceAll(')', '&#41;', html);
     return html;
 };
 
@@ -240,32 +254,23 @@ function renderParagraph(paragraph){
             <div>${extension[0].basic}</div>`;
         }
     }
-    const extId = `${paragraph.uid}.extension`
+    const extId = `${paragraph.uid}-extension`
     let html = paragraph.extension ? `
-                                        <div id=${paragraph.uid} class='paragraphView' style="display:block">
+                                        <div id="${paragraph.uid}" class='paragraphView' style="display:block">
                                             <button onClick="extensionActive(${paragraph.uid})">
                                                 ${extensionType[paragraph.extension.type]}</button>
-                                            <div class='textView' style="width:95%">${paragraph.basic}</div>  
+                                            <div class='textView'>${paragraph.basic}</div>  
                                         </div>
-                                        <div id=${extId} class='paragraphView' style="display:none">
+                                        <div id="${extId}" class='paragraphView' style="display:none">
                                             <button onClick="extensionNonActive(${paragraph.uid})">&larr;</button> 
                                             ${renderExtensionParagraphs(extension)}
                                         </div>
                                     ` 
                                 : `<div class='paragraphView'>
-                                        <div class='textView' style="width: 95%">
+                                        <div class='textView'>
                                             ${paragraph.basic}
                                         </div>
                                   </div>`
-    html = replaceAll('\\~', '~', html);
-    html = replaceAll('\\\\', '\\', html);
-    html = replaceAll('~', '&nbsp;', html);
-    html = replaceAll('---', '&#8212;', html);
-    html = replaceAll('--', '&#8211;', html);
-    html = replaceAll('``', '“', html);
-    html = replaceAll('\'\'', '”', html);
-    html = replaceAll('<<', '«', html);
-    html = replaceAll('>>', '»', html);
     return html
 }
 
@@ -291,54 +296,37 @@ function renderExtensionParagraph(paragraph, i, existExt){
     const width0 = existExt ? 90 : 95;
     if(i === 0){
         let html = paragraph.extension ? `<span>
-                                            <div id=${paragraph.uid} class='paragraphView' style="display:block">
+                                            <div id="${paragraph.uid}" class='paragraphView' style="display:block">
                                                 <button onClick="extensionActive(${paragraph.uid})">
                                                     ${extensionType[paragraph.extension.type]}</button>
-                                                    <div class='textView' style="width:95%">${paragraph.basic}</div>  
+                                                    <div class='textView'>${paragraph.basic}</div>  
                                             </div>
-                                            <div id=${extId} class='paragraphView' style="display:none">
+                                            <div id="${extId}" class='paragraphView' style="display:none">
                                                 <button onClick="extensionNonActive(${paragraph.uid})">&larr;</button> 
                                                 ${renderExtensionParagraphs(extension)}
                                             </div>
                                             </span>` 
-                                    : `<div class='textView' style="width:${width0}%">${paragraph.basic}</div>`
-        html = replaceAll('\\~', '~', html);
-        html = replaceAll('\\\\', '\\', html);
-        html = replaceAll('~', '&nbsp;', html);
-        html = replaceAll('---', '&#8212;', html);
-        html = replaceAll('--', '&#8211;', html);
-        html = replaceAll('``', '“', html);
-        html = replaceAll('\'\'', '”', html);
-        html = replaceAll('<<', '«', html);
-        html = replaceAll('>>', '»', html);
+                                    : `<div class='textView'>${paragraph.basic}</div>`
+
         return html
     }
     else{
         let html = paragraph.extension ? `<div>
-                                            <div id=${paragraph.uid} class='paragraphView' style="display:block">
+                                            <div id="${paragraph.uid}" class='paragraphView' style="display:block">
                                                 <button onClick="extensionActive(${paragraph.uid})">
                                                     ${extensionType[paragraph.extension.type]}</button>
-                                                    <div class='textView' style="width:${width}%">${paragraph.basic}</div>  
+                                                    <div class='textView'>${paragraph.basic}</div>  
                                             </div>
-                                            <div id=${extId} class='paragraphView'style="display:none">
+                                            <div id="${extId}" class='paragraphView'style="display:none">
                                                 <button onClick="extensionNonActive(${paragraph.uid})">&larr;</button> 
                                                 ${renderExtensionParagraphs(extension)}
                                             </div>
                                         </div>` 
                                     : `<div class='paragraphView'>
-                                            <div class='textView' style="width:${width}%">
+                                            <div class='textView'>
                                                 ${paragraph.basic}
                                             </div>
                                     </div>`
-        html = replaceAll('\\~', '~', html);
-        html = replaceAll('\\\\', '\\', html);
-        html = replaceAll('~', '&nbsp;', html);
-        html = replaceAll('---', '&#8212;', html);
-        html = replaceAll('--', '&#8211;', html);
-        html = replaceAll('``', '“', html);
-        html = replaceAll('\'\'', '”', html);
-        html = replaceAll('<<', '«', html);
-        html = replaceAll('>>', '»', html);
         return html
     }
 }
@@ -348,7 +336,7 @@ function renderTasks(tasks, partNumb){
     let html = `<div>
                     <div id="notSeeTask${partNumb}" class='paragraphView' style="display:block">
                         <button onClick="addTasks(${partNumb}, randomNumb(${tasks.length}))">T</button>
-                        <div class='textView' style="width:95%"></div>
+                        <div class='textView'></div>
                     </div>
                     <div id="seeTask${partNumb}" class='paragraphView' style="display:none">
                         <button onClick="dontTasks(${partNumb}, ${tasks.length})">&larr;</button>
@@ -387,16 +375,16 @@ function renderTask(task, partNumb, taskNumb){
                     </div>
                         <div class='paragraphView' id="taskAnswer${partNumb}-${taskNumb}" style="display:none">
                             <button onClick="changeShowOption(${partNumb}, ${taskNumb})">+</button>
-                            <div class='textView' style="width:95%; margin-bottom:0">
+                            <div class='textView' style="margin-bottom:0">
                                 Правильный ответ - ${task.rightAnswer}
                             </div>      
                         </div>
                         <div class='paragraphView' id="taskAnswerOption${partNumb}-${taskNumb}" style="display:none">
                             <button onClick="dontShowAnswer(${partNumb},${taskNumb})">&larr;</button>
-                            <div class='textView' style="width:95%; margin-bottom:0">
+                            <div class='textView' style="margin-bottom:0">
                                 Правильный ответ - ${task.rightAnswer}
                             </div>
-                            <div class='textView' style="width:95%; margin-top:0">
+                            <div class='textView' style="margin-top:0">
                                 ${task.option}
                             </div>
                         </div>

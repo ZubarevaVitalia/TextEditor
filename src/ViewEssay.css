@@ -63,12 +63,13 @@ button {
   }
   .textView{
     float: right;
-    width: 95%;
-    /*margin-bottom: 10px;
-    margin-top: 15px;*/
+    width: calc(100% - 50px);
+    text-indent: 10px;
+    margin-bottom: 10px;
+    margin-top: 15px;
   }
   .paragraphView{
-    width: 95%;
+    width: calc(100% - 50px);
     float: right;
   }
 

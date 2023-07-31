@@ -129,7 +129,7 @@ class Options extends React.Component {
                         <option value="Verdana" style={{fontFamily: "Verdana"}}>Verdana</option>
                       </select>
           <button className="textbut">
-            <a href = {URL.createObjectURL(new Blob([JSON.stringify(this.props.essay, null, "\t")], 
+            <a href = {URL.createObjectURL(new Blob([JSON.stringify(this.props.essay, null, "    ")], 
                       {type: 'application/json'}))}
             download = "essay.json"
             >Сохранить</a>

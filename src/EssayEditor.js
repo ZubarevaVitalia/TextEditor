@@ -277,7 +277,7 @@ class EssayEditor extends React.Component {
                 <button onClick={()=>this.addAnswer(answer, task)}>
                     <FontAwesomeIcon icon="fa-solid fa-plus"/>
                 </button>
-                <span className='description'>Введите ответ №{i+1}:</span> 
+                <span className='description'>Ответ №{i+1}:</span> 
                 <ContentEditable className='answerEdit' html={answer.answer} onChange={(e) => this.answerChangeHandler(e, answer)}></ContentEditable>
             </div>
         )
@@ -301,16 +301,16 @@ class EssayEditor extends React.Component {
             <div className='task'>
                 <button className='textbut' onClick={() => this.deleteTask(task, part)}>Удалить вопрос</button>
                 <div className='question'>
-                <span className='description'>Введите вопрос:</span>
+                <span className='description'>Вопрос:</span>
                     <ContentEditable className='questionEdit' html={task.question} onChange={(e) => this.questionChangeHandler(e, task)}></ContentEditable>
                 </div>
                 {task.answers.map((answer, i) => this.renderAnswer(answer, task, i))}
                 <div className='rightAnswer'>
-                Введите порядковый номер правильного ответа:
+                Порядковый номер правильного ответа:
                     <input type="text" value={task.rightAnswer} onChange={(e) => this.rigthAnswerChangeHandler(e, task)}></input>
                 </div>
                 <div className='option'>
-                    <span className='description'>Введите комментарий к ответу:</span> 
+                    <span className='description'>Комментарий к ответу:</span> 
                     <ContentEditable className='optionEdit' html={task.option} onChange={(e) => this.optionChangeHandler(e, task)}></ContentEditable>
                 </div>
                 <button className='textbut' onClick={() => this.addTask(part)}>
@@ -445,24 +445,28 @@ class EssayEditor extends React.Component {
                                     </button>
                                     </p>
                                     {this.renderParagraphs(part.paragraphs)}
-                                    {this.state.dialog===`Part${i}` && <dialog id="dialog" open onBlur={()=>this.closeDialog()}>
-                                        <p>Добавить новую главу ... текущей</p>
-                                        <button onClick={() => this.addPartBefore(part)}>
-                                            До
-                                        </button>
-                                        <button onClick={() => this.addPartAfter(part)} style={{width:"70px"}}>
-                                            После
-                                        </button>
-                                        <button onClick={() => this.setState({dialog: false})} className="textbut">Отмена</button>
-                                </dialog>}
+                                    <span>
                                     {part.tasks ?
                                         <button className="partadd" onClick={() => this.deleteTasks(part)}>Удалить вопросы</button>
                                         :
-                                        <button className="partadd" onClick={() => this.addTasks(part)}>Добавить вопросы</button>
+                                        <button className="partadd" onClick={() => this.addTasks(part)}>Добавить вопросы</button>    
                                     }
                                     {part.tasks && this.renderTasks(part)}
-                                    
-                                    <button className="partadd" onClick={() => this.setState({dialog: `Part${i}`})}>Добавить главу</button>
+                                    <span style={{display:"inline-flex"}}>
+                                        {this.state.dialog===`Part${i}` && <dialog id="dialog" style={{position:"relative"}} open onBlur={()=>this.closeDialog()}>
+                                                <p>Добавить новую главу ... текущей</p>
+                                                <button onClick={() => this.addPartBefore(part)}>
+                                                    До
+                                                </button>
+                                                <button onClick={() => this.addPartAfter(part)} style={{width:"70px"}}>
+                                                    После
+                                                </button>
+                                                <button onClick={() => this.setState({dialog: false})} className="textbut">Отмена</button>
+                                        </dialog>}
+                                        <button className="partadd" onClick={() => this.setState({dialog: `Part${i}`})}>Добавить главу</button>
+                                        
+                                    </span>
+                                    </span>
                                     
 
                                 </div>

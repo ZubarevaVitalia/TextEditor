@@ -1,7 +1,7 @@
 
 .editorSheet {
   background-color: #ffffff;
-  width: 88%;
+  width: calc(100% - 130px);
   border: solid;
   padding: 15px;
   border-style: solid;
@@ -47,7 +47,7 @@ body {
   align-items: line;
 }
 .questionEdit{
-  width: 88.7%;
+  width: calc(100% - 80px);
   border: solid;
   padding: 15px;
   margin: 10px;
@@ -65,7 +65,7 @@ body {
   align-items: line;
 }
 .answerEdit{
-  width: 79.3%;
+  width: calc(100% - 195px);
   border: solid;
   padding: 15px;
   margin: 10px;
@@ -97,7 +97,7 @@ body {
   align-items: line;
 }
 .optionEdit{
-  width: 80%;
+  width: calc(100% - 185px);
   border: solid;
   padding: 15px;
   margin: 10px;
